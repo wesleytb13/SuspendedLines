@@ -56,7 +56,6 @@ def view_overdue():
 
 def view_number():
     phoneNum = input("Please enter the phone number you want to check (xxx-xxx-xxxx): ")
-    print(phoneNum)
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum, ))
     result = cursor.fetchall()
@@ -65,12 +64,29 @@ def view_number():
         print("There was no entry that matches that number.")
         print("")
     else:
+        print("")
         print("PhoneNumber    SuspendDate    ActivateDate   ")
         for row in result:
             print(row[0], " ", row[1], "     ", row[2], "   ", "\n")
 
+
+def show_all():
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM numbers")
+    result = cursor.fetchall()
+    if not result:
+        print("")
+        print("There are no numbers that need to be suspended at this time!")
+        print("")
+    else:
+        print("")
+        print("PhoneNumber    SuspendDate    ActivateDate   ")
+        for row in result:
+            print(row[0], " ", row[1], "     ", row[2])
+        print("")
+
 try:
-    connection = mysql.connector.connect(host='', database='', user="", password='')
+    connection = mysql.connector.connect(host='', database='', user='', password='')
     print("Welcome to the Suspended Lines App")
     print("------------------------------------")
     print("Please choose an option below(1-5): ")
@@ -79,6 +95,7 @@ try:
     print("3. Edit suspension date for an existing line.")
     print("4. View overdue lines.")
     print("5. View specific line status.")
+    print("6. Show all entries.")
     print(" ")
     userOption = input("Enter option to continue or 'quit' to exit: ")
     while userOption != "quit":
@@ -92,6 +109,8 @@ try:
             view_overdue()
         elif userOption == '5':
             view_number()
+        elif userOption == '6':
+            show_all()
         print("Please choose an option below(1-5): ")
         print("1. Add a suspended line.")
         print("2. Remove line from database.")
