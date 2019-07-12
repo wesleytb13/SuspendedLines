@@ -1,4 +1,5 @@
 import datetime
+import os
 import mysql.connector
 from mysql.connector import Error
 from dateutil.parser import parse
@@ -19,6 +20,7 @@ def welcome_msg():
     return answer
 
 def add_phone_line():
+    os.system('cls')
     phoneNum = input("Please enter phone number (xxx-xxx-xxxx): ")
     inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
     suspendDate = parse(inputDate).strftime("%Y-%m-%d")
@@ -29,17 +31,24 @@ def add_phone_line():
     connection.commit()
     print("Number added successfully.")
     print("")
+    input("Press Enter to continue.")
+    os.system('cls')
 
 
 def del_phone_line():
+    os.system('cls')
     phoneNum = input("Please enter phone number to delete (xxx-xxx-xxxx): ")
     cursor = connection.cursor()
     result = cursor.execute("DELETE FROM numbers where PhoneNumber = %s", (phoneNum,))
     connection.commit()
     print("Number removed successfully.")
     print("")
+    input("Press Enter to continue.")
+    os.system('cls')
+
 
 def change_dates():
+    os.system('cls')
     phoneNum = input("Please enter phone number to edit (xxx-xxx-xxxx): ")
     inputDate = input("Enter new suspension date (MM-DD-YYYY): ")
     newDate = parse(inputDate).strftime("%Y-%m-%d")
@@ -50,9 +59,12 @@ def change_dates():
     result1 = cursor.execute("UPDATE numbers SET ActivateDate = %s where PhoneNumber = %s", (activeDate, phoneNum))
     print("Number updated successfully.")
     print("")
+    input("Press Enter to continue.")
+    os.system('cls')
 
 
 def view_overdue():
+    os.system('cls')
     todayDate = datetime.datetime.now()
     now = todayDate.strftime("%Y-%m-%d")
     cursor = connection.cursor()
@@ -66,9 +78,12 @@ def view_overdue():
         print("PhoneNumber    SuspendDate    ActivateDate   ")
         for row in result:
             print(row[0], " ", row[1], "     ", row[2], "   ", "\n")
+    input("Press Enter to continue.")
+    os.system('cls')
 
 
 def view_number():
+    os.system('cls')
     phoneNum = input("Please enter the phone number you want to check (xxx-xxx-xxxx): ")
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum, ))
@@ -82,9 +97,12 @@ def view_number():
         print("PhoneNumber    SuspendDate    ActivateDate   ")
         for row in result:
             print(row[0], " ", row[1], "     ", row[2], "   ", "\n")
+    input("Press Enter to continue.")
+    os.system('cls')
 
 
 def show_all():
+    os.system('cls')
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM numbers")
     result = cursor.fetchall()
@@ -98,6 +116,9 @@ def show_all():
         for row in result:
             print(row[0], " ", row[1], "     ", row[2])
         print("")
+    input("Press Enter to continue.")
+    os.system('cls')
+
 
 try:
     connection = mysql.connector.connect(host='', database='', user='', password='')
