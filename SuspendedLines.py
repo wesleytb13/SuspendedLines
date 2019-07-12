@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 def welcome_msg():
     print("Welcome to the Suspended Lines App")
     print("------------------------------------")
-    print("Please choose an option below(1-5): ")
+    print("Please choose an option below: ")
     print("1. Add a suspended line.")
     print("2. Remove line from database.")
     print("3. Edit suspension date for an existing line.")
