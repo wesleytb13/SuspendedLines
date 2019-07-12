@@ -4,6 +4,20 @@ from mysql.connector import Error
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
+def welcome_msg():
+    print("Welcome to the Suspended Lines App")
+    print("------------------------------------")
+    print("Please choose an option below(1-5): ")
+    print("1. Add a suspended line.")
+    print("2. Remove line from database.")
+    print("3. Edit suspension date for an existing line.")
+    print("4. View overdue lines.")
+    print("5. View specific line status.")
+    print("6. Show all entries.")
+    print(" ")
+    answer = input("Enter option to continue or 'quit' to exit: ")
+    return answer
+
 def add_phone_line():
     phoneNum = input("Please enter phone number (xxx-xxx-xxxx): ")
     inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
@@ -87,17 +101,7 @@ def show_all():
 
 try:
     connection = mysql.connector.connect(host='', database='', user='', password='')
-    print("Welcome to the Suspended Lines App")
-    print("------------------------------------")
-    print("Please choose an option below(1-5): ")
-    print("1. Add a suspended line.")
-    print("2. Remove line from database.")
-    print("3. Edit suspension date for an existing line.")
-    print("4. View overdue lines.")
-    print("5. View specific line status.")
-    print("6. Show all entries.")
-    print(" ")
-    userOption = input("Enter option to continue or 'quit' to exit: ")
+    userOption = welcome_msg()
     while userOption != "quit":
         if userOption == '1':
             add_phone_line()
@@ -111,14 +115,7 @@ try:
             view_number()
         elif userOption == '6':
             show_all()
-        print("Please choose an option below(1-5): ")
-        print("1. Add a suspended line.")
-        print("2. Remove line from database.")
-        print("3. Edit suspension date for an existing line.")
-        print("4. View overdue lines.")
-        print("5. View specific line status.")
-        print(" ")
-        userOption = input("Enter option to continue or 'quit' to exit: ")
+        userOption = welcome_msg()
 
 
 
