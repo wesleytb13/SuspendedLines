@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 import mysql.connector
 from mysql.connector import Error
 from dateutil.parser import parse
@@ -19,9 +20,14 @@ def welcome_msg():
     answer = input("Enter option to continue or 'quit' to exit: ")
     return answer
 
+
 def add_phone_line():
     os.system('cls')
+    valid_phone = re.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$")
     phoneNum = input("Please enter phone number (xxx-xxx-xxxx): ")
+    while not valid_phone.match(phoneNum):
+        os.system('cls')
+        phoneNum = input("You have entered an invalid number, please try again (xxx-xxx-xxxx): ")
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum,))
     result = cursor.fetchall()
@@ -30,13 +36,16 @@ def add_phone_line():
         suspendDate = parse(inputDate).strftime("%Y-%m-%d")
         tempDate = parse(inputDate)+ relativedelta(days=90)
         activeDate = tempDate.strftime("%Y-%m-%d")
-        cursor = connection.cursor()
-        result = cursor.execute("INSERT INTO numbers (PhoneNumber, SuspendDate, ActivateDate) VALUES (%s, %s, %s)", (phoneNum, suspendDate, activeDate))
+        cursor1 = connection.cursor()
+        result1 = cursor1.execute("INSERT INTO numbers (PhoneNumber, SuspendDate, ActivateDate) VALUES (%s, %s, %s)", (phoneNum, suspendDate, activeDate))
         connection.commit()
+        cursor1.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum,))
+        result1 = cursor1.fetchall()
         print("Number added successfully.")
         print("")
         input("Press Enter to continue.")
         os.system('cls')
+        return result1
     else:
         print("")
         print("This number already in list.")
@@ -44,9 +53,14 @@ def add_phone_line():
         input("Press Enter to continue.")
         os.system('cls')
 
+
 def del_phone_line():
     os.system('cls')
+    valid_phone = re.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$")
     phoneNum = input("Please enter phone number to delete (xxx-xxx-xxxx): ")
+    while not valid_phone.match(phoneNum):
+        os.system('cls')
+        phoneNum = input("You have entered an invalid number, please try again (xxx-xxx-xxxx): ")
     cursor = connection.cursor()
     result = cursor.execute("DELETE FROM numbers where PhoneNumber = %s", (phoneNum,))
     connection.commit()
@@ -58,7 +72,11 @@ def del_phone_line():
 
 def change_dates():
     os.system('cls')
+    valid_phone = re.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$")
     phoneNum = input("Please enter phone number to edit (xxx-xxx-xxxx): ")
+    while not valid_phone.match(phoneNum):
+        os.system('cls')
+        phoneNum = input("You have entered an invalid number, please try again (xxx-xxx-xxxx): ")
     inputDate = input("Enter new suspension date (MM-DD-YYYY): ")
     newDate = parse(inputDate).strftime("%Y-%m-%d")
     tempDate = parse(inputDate)+ relativedelta(days=90)
@@ -93,7 +111,11 @@ def view_overdue():
 
 def view_number():
     os.system('cls')
+    valid_phone = re.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$")
     phoneNum = input("Please enter the phone number you want to check (xxx-xxx-xxxx): ")
+    while not valid_phone.match(phoneNum):
+        os.system('cls')
+        phoneNum = input("You have entered an invalid number, please try again (xxx-xxx-xxxx): ")
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum, ))
     result = cursor.fetchall()
