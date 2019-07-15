@@ -22,18 +22,27 @@ def welcome_msg():
 def add_phone_line():
     os.system('cls')
     phoneNum = input("Please enter phone number (xxx-xxx-xxxx): ")
-    inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
-    suspendDate = parse(inputDate).strftime("%Y-%m-%d")
-    tempDate = parse(inputDate)+ relativedelta(days=90)
-    activeDate = tempDate.strftime("%Y-%m-%d")
     cursor = connection.cursor()
-    result = cursor.execute("INSERT INTO numbers (PhoneNumber, SuspendDate, ActivateDate) VALUES (%s, %s, %s)", (phoneNum, suspendDate, activeDate))
-    connection.commit()
-    print("Number added successfully.")
-    print("")
-    input("Press Enter to continue.")
-    os.system('cls')
-
+    cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum,))
+    result = cursor.fetchall()
+    while not result:
+        inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
+        suspendDate = parse(inputDate).strftime("%Y-%m-%d")
+        tempDate = parse(inputDate)+ relativedelta(days=90)
+        activeDate = tempDate.strftime("%Y-%m-%d")
+        cursor = connection.cursor()
+        result = cursor.execute("INSERT INTO numbers (PhoneNumber, SuspendDate, ActivateDate) VALUES (%s, %s, %s)", (phoneNum, suspendDate, activeDate))
+        connection.commit()
+        print("Number added successfully.")
+        print("")
+        input("Press Enter to continue.")
+        os.system('cls')
+    else:
+        print("")
+        print("This number already in list.")
+        print("")
+        input("Press Enter to continue.")
+        os.system('cls')
 
 def del_phone_line():
     os.system('cls')
