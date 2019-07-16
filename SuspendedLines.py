@@ -135,7 +135,7 @@ def view_number():
 def show_all():
     os.system('cls')
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM numbers")
+    cursor.execute("SELECT * FROM numbers ORDER BY SuspendDate ASC")
     result = cursor.fetchall()
     if not result:
         print("")
