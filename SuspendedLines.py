@@ -32,7 +32,11 @@ def add_phone_line():
     cursor.execute("SELECT * FROM numbers where PhoneNumber = %s", (phoneNum,))
     result = cursor.fetchall()
     while not result:
+        valid_date = re.compile("^[0-9]{2}-[0-9]{2}-[0-9]{4}$")
         inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
+        while not valid_date.match(inputDate):
+            os.system('cls')
+            inputDate = input("You have entered an invalid date, please try again (DD-MM-YYYY): ")
         suspendDate = parse(inputDate).strftime("%Y-%m-%d")
         tempDate = parse(inputDate)+ relativedelta(days=90)
         activeDate = tempDate.strftime("%Y-%m-%d")
@@ -77,7 +81,11 @@ def change_dates():
     while not valid_phone.match(phoneNum):
         os.system('cls')
         phoneNum = input("You have entered an invalid number, please try again (xxx-xxx-xxxx): ")
-    inputDate = input("Enter new suspension date (MM-DD-YYYY): ")
+    valid_date = re.compile("^[0-9]{2}-[0-9]{2}-[0-9]{4}$")
+    inputDate = input("Please enter date suspended (DD-MM-YYYY): ")
+    while not valid_date.match(inputDate):
+        os.system('cls')
+        inputDate = input("You have entered an invalid date, please try again (DD-MM-YYYY): ")
     newDate = parse(inputDate).strftime("%Y-%m-%d")
     tempDate = parse(inputDate)+ relativedelta(days=90)
     activeDate = tempDate.strftime("%Y-%m-%d")
